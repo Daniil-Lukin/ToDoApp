@@ -82,6 +82,6 @@ export class AuthService {
 
   signOut() {
     this.state.changeSignedInState();
-    return this._auth.signOut().then(() => localStorage.removeItem('user'));
+    localStorage.removeItem('user');
   }
 }
