@@ -6,7 +6,7 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { StatefulService } from './shared/services/stateful.service';
+import { StatefulService } from './services/stateful.service';
 
 @Injectable({
   providedIn: 'root',
