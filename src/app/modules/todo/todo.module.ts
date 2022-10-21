@@ -11,9 +11,16 @@ import { TaskDialogComponent } from './components/task-dialog/task-dialog.compon
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { HeaderComponent } from './components/header/header.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
-  declarations: [TaskComponent, TodoComponent, TaskDialogComponent],
+  declarations: [
+    TaskComponent,
+    TodoComponent,
+    TaskDialogComponent,
+    HeaderComponent,
+  ],
   imports: [
     CommonModule,
     MatCardModule,
@@ -23,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     MatDialogModule,
     MatFormFieldModule,
     FormsModule,
+    MatToolbarModule,
   ],
   exports: [TaskComponent],
 })

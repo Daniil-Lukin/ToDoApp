@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './components/auth-component/auth.component';

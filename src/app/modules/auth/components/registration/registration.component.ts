@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { AuthComponent } from '../auth-component/auth.component';
 
 @Component({
   selector: 'app-registration',
@@ -9,20 +9,51 @@ import { AuthComponent } from '../auth-component/auth.component';
   styleUrls: ['./registration.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegistrationComponent extends AuthComponent {
-  public passwordRepeat: string = '';
+export class RegistrationComponent implements OnInit {
+  public registrationForm: FormGroup;
   public hidePasswordRepeat: boolean = true;
+  public hidePassword: boolean = true;
 
-  constructor(service: AuthService, router: Router) {
-    super(service, router);
+  constructor(
+    private service: AuthService,
+    private router: Router,
+    private builder: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.registrationForm = this.builder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      passwordRepeat: ['', [Validators.required, Validators.minLength(6)]],
+    });
   }
 
-  public override registrateButtonClick(): void {
-    if (this.password === this.passwordRepeat) {
-      this._service.signUp(this.emailValidation.getRawValue()!, this.password);
-      this._router.navigate(['signIn']);
+  public registrateButtonClick(): void {
+    if (this.password.value === this.passwordRepeat.value) {
+      this.service.signUp(this.email.value, this.password.value);
+      this.router.navigate(['sign-in']);
     } else {
       window.alert('Passwords must be the same');
     }
+  }
+
+  public getErrorMessage(): string {
+    if (this.email.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.email.hasError('email') ? 'Not a valid email' : '';
+  }
+
+  get email() {
+    return this.registrationForm.get('email');
+  }
+
+  get password() {
+    return this.registrationForm.get('password');
+  }
+
+  get passwordRepeat() {
+    return this.registrationForm.get('passwordRepeat');
   }
 }

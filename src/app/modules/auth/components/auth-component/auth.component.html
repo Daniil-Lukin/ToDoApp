@@ -1,15 +1,16 @@
+<button (click)="qwerty()">check user</button>
 <div class="component-container">
   <div class="register-card">
-    <div class="example-container">
+    <form [formGroup]="authForm">
       <mat-form-field appearance="fill">
-        <mat-label>Enter your email</mat-label>
+        <mat-label for="email">Enter your email</mat-label>
         <input
           matInput
           placeholder="pat@example.com"
-          [formControl]="emailValidation"
+          formControlName="email"
           required
         />
-        <mat-error *ngIf="emailValidation.invalid">{{
+        <mat-error *ngIf="!email.valid && email.touched">{{
           getErrorMessage()
         }}</mat-error>
       </mat-form-field>
@@ -19,7 +20,8 @@
         <input
           matInput
           [type]="hide ? 'password' : 'text'"
-          [(ngModel)]="password"
+          formControlName="password"
+          required
         />
         <button
           mat-icon-button
@@ -31,8 +33,8 @@
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
-    </div>
-    <button mat-raised-button color="primary" (click)="signInButtonClicked()">
+    </form>
+    <button mat-raised-button color="primary" (click)="signInButtonClick()">
       Sign in
     </button>
     <button mat-button (click)="registrateButtonClick()">

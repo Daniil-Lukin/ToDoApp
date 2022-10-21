@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from '@firebase/util';
 import { TodoTask } from '../../interfaces/TodoTask';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
 import { DialogResult } from '../../interfaces/dialog-result';
-import { Section } from '../../interfaces/section';
 import { TodoService } from '../../services/todo.service';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 

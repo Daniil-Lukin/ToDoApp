@@ -5,57 +5,50 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { StatefulService } from './stateful.service';
 import { User } from './user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  userData: any;
+  public userData: User;
+  public userLoggedIn: boolean = false;
   constructor(
-    private _auth: AngularFireAuth,
-    private _fireApp: AngularFirestore,
-    private _router: Router,
-    public state: StatefulService
-  ) {
-    this._auth.authState.subscribe((user) => {
-      if (user) {
-        this.userData = user;
-        localStorage.setItem('user', JSON.stringify(this.userData));
-      } else {
-        localStorage.setItem('user', 'null');
-      }
-      JSON.parse(localStorage.getItem('user')!);
-    });
-  }
+    private fireAuth: AngularFireAuth,
+    private firestore: AngularFirestore
+  ) {}
 
-  setUpUser(user: any) {
-    const userRef: AngularFirestoreDocument<any> = this._fireApp.doc(
-      `users/${user.userID}`
+  setUpFirebaseUser(user: User) {
+    const userRef: AngularFirestoreDocument<any> = this.firestore.doc(
+      `users/${user.uid}`
     );
-    const userData: User = {
+    this.userData = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
     };
-    return userRef.set(userData, {
+    return userRef.set(this.userData, {
       merge: true,
     });
   }
 
+  setUser() {
+    this.fireAuth.authState.subscribe((user) => {
+      console.log(
+        'from userStatus: user ' + user + ' userLoggedIn: ' + this.userLoggedIn
+      );
+      this.userLoggedIn = !!user;
+    });
+  }
+
   signIn(email: string, password: string) {
-    return this._auth
+    return this.fireAuth //first value from
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.setUpUser(result.user),
-          this._auth.authState.subscribe((user) => {
-            if (user) {
-              this.state.changeSignedInState();
-              this._router.navigate(['toDo']);
-            }
-          });
+        this.setUpFirebaseUser(result.user);
+        console.log('from signIn ' + this.userLoggedIn);
+        //app initializaer
       })
       .catch((error) => {
         window.alert(error.message);
@@ -63,10 +56,10 @@ export class AuthService {
   }
 
   signUp(email: string, password: string) {
-    return this._auth
+    return this.fireAuth
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.setUpUser(result.user);
+      .then(({ user }) => {
+        this.setUpFirebaseUser(user);
       })
       .catch((error) => {
         window.alert(error.message);
@@ -74,14 +67,13 @@ export class AuthService {
   }
 
   resetPassword(email: string) {
-    return this._auth
+    return this.fireAuth
       .sendPasswordResetEmail(email)
       .then(() => window.alert('password reset has been sent, check mailbox'))
       .catch((error) => window.alert(error.message));
   }
 
   signOut() {
-    this.state.changeSignedInState();
-    localStorage.removeItem('user');
+    this.fireAuth.signOut();
   }
 }

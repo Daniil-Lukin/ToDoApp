@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './modules/header/components/header.component';
 import { TodoModule } from './modules/todo/todo.module';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -15,7 +14,9 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
-import { HeaderModule } from './modules/header/header.module';
+import { AuthGuard } from './shared/auth.guard';
+import { AuthService } from './shared/services/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,14 +29,23 @@ import { HeaderModule } from './modules/header/header.module';
     SharedModule,
     AuthModule,
     MatIconModule,
-    HeaderModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireDatabaseModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authService: AuthService) => () => {
+        authService.setUser();
+        return authService.userLoggedIn;
+      },
+      deps: [AuthService],
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

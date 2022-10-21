@@ -5,16 +5,16 @@ import { AuthGuard } from './shared/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'signIn',
+    redirectTo: 'sign-in',
     pathMatch: 'full',
   },
   {
-    path: 'signIn',
+    path: 'sign-in',
     loadChildren: () =>
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: 'toDo',
+    path: 'to-do',
     loadChildren: () =>
       import('./modules/todo/todo.module').then((m) => m.TodoModule),
     canActivate: [AuthGuard],

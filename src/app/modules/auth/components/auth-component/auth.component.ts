@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -9,33 +9,53 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   styleUrls: ['./auth.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthComponent {
-  public emailValidation = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+export class AuthComponent implements OnInit {
+  public authForm;
   public hide: boolean = true;
-  public password: string = '';
 
-  constructor(protected _service: AuthService, protected _router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.authForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
 
   public getErrorMessage(): string {
-    if (this.emailValidation.hasError('required')) {
+    if (this.email.hasError('required')) {
       return 'You must enter a value';
     }
 
-    return this.emailValidation.hasError('email') ? 'Not a valid email' : '';
+    return this.email.hasError('email') ? 'Not a valid email' : '';
   }
 
-  public signInButtonClicked() {
-    this._service.signIn(this.emailValidation.getRawValue()!, this.password);
+  public signInButtonClick() {
+    this.authService.signIn(this.email.value, this.password.value);
+    this.router.navigate(['to-do']);
   }
 
   public registrateButtonClick() {
-    this._router.navigate(['registration']);
+    this.router.navigate(['registration']);
   }
 
   public forgotPasswordButtonClick() {
-    this._service.resetPassword(this.emailValidation.getRawValue()!);
+    this.authService.resetPassword(this.email.value);
+  }
+
+  get email() {
+    return this.authForm.get('email');
+  }
+
+  get password() {
+    return this.authForm.get('password');
+  }
+
+  qwerty() {
+    console.log(this.authService.userLoggedIn);
   }
 }
