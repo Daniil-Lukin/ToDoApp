@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -21,20 +27,28 @@ export class RegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.registrationForm = this.builder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      passwordRepeat: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    this.registrationForm = this.builder.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        passwordRepeat: ['', [Validators.required, Validators.minLength(6)]],
+      }
+      // {
+      //   validators: this.passwordRepeatValidator(
+      //     this.password.value,
+      //     this.passwordRepeat.value
+      //   ),
+      // }
+    );
   }
 
   public registrateButtonClick(): void {
-    if (this.password.value === this.passwordRepeat.value) {
-      this.service.signUp(this.email.value, this.password.value);
-      this.router.navigate(['sign-in']);
-    } else {
-      window.alert('Passwords must be the same');
-    }
+    // if (this.password.value === this.passwordRepeat.value) {
+    this.service.signUp(this.email.value, this.password.value);
+    this.router.navigate(['sign-in']);
+    // } else {
+    //   window.alert('Passwords must be the same');
+    // }
   }
 
   public getErrorMessage(): string {
@@ -46,14 +60,23 @@ export class RegistrationComponent implements OnInit {
   }
 
   get email() {
-    return this.registrationForm.get('email');
+    return this.registrationForm?.get('email');
   }
 
   get password() {
-    return this.registrationForm.get('password');
+    return this.registrationForm?.get('password');
   }
 
   get passwordRepeat() {
-    return this.registrationForm.get('passwordRepeat');
+    return this.registrationForm?.get('passwordRepeat');
+  }
+
+  private passwordRepeatValidator(password: string, passwordRepeat: string) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (password != passwordRepeat) {
+        return { passwordsDoNotMatch: true };
+      }
+      return null;
+    };
   }
 }

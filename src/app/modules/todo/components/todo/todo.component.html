@@ -19,7 +19,7 @@
         Empty list
       </p>
       <app-task
-        (edit)="editTask('todo', $event)"
+        (edit)="editTask($event)"
         *ngFor="let todo of $todo | async"
         cdkDrag
         [toDo]="todo"
@@ -42,7 +42,7 @@
         Empty list
       </p>
       <app-task
-        (edit)="editTask('inProgress', $event)"
+        (edit)="editTask($event)"
         *ngFor="let todo of $inProgress | async"
         cdkDrag
         [toDo]="todo"
@@ -65,7 +65,7 @@
         Empty list
       </p>
       <app-task
-        (edit)="editTask('done', $event)"
+        (edit)="editTask($event)"
         *ngFor="let todo of $done | async"
         cdkDrag
         [toDo]="todo"

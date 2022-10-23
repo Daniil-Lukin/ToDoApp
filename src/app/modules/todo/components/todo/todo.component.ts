@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { TodoTask } from '../../interfaces/TodoTask';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,6 +6,7 @@ import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
 import { DialogResult } from '../../interfaces/dialog-result';
 import { TodoService } from '../../services/todo.service';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-todo',
@@ -14,25 +15,31 @@ import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
-  public $todo = this._store.collection('todo').valueChanges({ idField: 'id' });
+  public $inProgress = this.todoService
+    .getSource()
+    .pipe(map((data) => data.filter((value) => value.status === 'inProgress')));
 
-  public $inProgress = this._store
-    .collection('inProgress')
-    .valueChanges({ idField: 'id' });
+  public $done = this.todoService
+    .getSource()
+    .pipe(map((data) => data.filter((value) => value.status === 'done')));
 
-  public $done = this._store.collection('done').valueChanges({ idField: 'id' });
+  public $todo = this.todoService
+    .getSource()
+    .pipe(map((data) => data.filter((value) => value.status === 'todo')));
 
   constructor(
     private _dialog: MatDialog,
-    private _service: TodoService,
-    private _store: AngularFirestore
+    private todoService: TodoService,
+    private angularFirestore: AngularFirestore
   ) {}
 
   public addTask(): void {
     const dialogWidnow = this._dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
-        task: {},
+        task: {
+          status: 'todo',
+        },
       },
     });
 
@@ -40,16 +47,16 @@ export class TodoComponent {
       if (!result) {
         return;
       }
-      this._service.addToDo(result);
+      this.todoService.addToDo(result);
     });
   }
 
-  public editTask(list: 'todo' | 'inProgress' | 'done', task: TodoTask): void {
+  public editTask(task: TodoTask): void {
     const dialogWidnow = this._dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
         task,
-        enableDelet: true,
+        enableDelete: true,
       },
     });
 
@@ -58,9 +65,9 @@ export class TodoComponent {
         return;
       }
       if (result.delete) {
-        this._service.deleteToDo(task, list);
+        this.todoService.deleteToDo(task);
       } else {
-        this._service.changeToDo(task, list);
+        this.todoService.changeToDo(task);
       }
     });
   }
@@ -70,13 +77,12 @@ export class TodoComponent {
       return;
     }
     const item = event.previousContainer.data[event.previousIndex];
-    this._store.firestore.runTransaction(() => {
+    this.angularFirestore.firestore.runTransaction(() => {
       const promise = Promise.all([
-        this._store
-          .collection(event.previousContainer.id)
+        this.todoService.userDocumentRef
+          .collection('to-do')
           .doc(item.id)
-          .delete(),
-        this._store.collection(event.container.id).add(item),
+          .update({ status: event.container.id }),
       ]);
       return promise;
     });

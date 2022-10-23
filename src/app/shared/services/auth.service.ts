@@ -5,6 +5,14 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import {
+  catchError,
+  firstValueFrom,
+  from,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import { User } from './user';
 
 @Injectable({
@@ -22,37 +30,41 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.firestore.doc(
       `users/${user.uid}`
     );
+    this.setUser(user);
+    this.userLoggedIn = true;
+    return userRef.set(this.userData, {
+      merge: true,
+    });
+  }
+
+  setUpTodoUser(user: User) {
+    const userRef: AngularFirestoreDocument<any> = this.firestore.doc(
+      `todos/${user.uid}`
+    );
+    return userRef.set(this.userData, {
+      merge: true,
+    });
+  }
+
+  setUser(user: User) {
     this.userData = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
     };
-    return userRef.set(this.userData, {
-      merge: true,
-    });
-  }
-
-  setUser() {
-    this.fireAuth.authState.subscribe((user) => {
-      console.log(
-        'from userStatus: user ' + user + ' userLoggedIn: ' + this.userLoggedIn
-      );
-      this.userLoggedIn = !!user;
-    });
+    console.log();
   }
 
   signIn(email: string, password: string) {
-    return this.fireAuth //first value from
-      .signInWithEmailAndPassword(email, password)
-      .then((result) => {
+    return from(this.fireAuth.signInWithEmailAndPassword(email, password)).pipe(
+      catchError((error) => of(error)),
+      switchMap((result) => {
         this.setUpFirebaseUser(result.user);
-        console.log('from signIn ' + this.userLoggedIn);
-        //app initializaer
+        this.setUpTodoUser(result.user);
+        return of(true);
       })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+    );
   }
 
   signUp(email: string, password: string) {
@@ -74,6 +86,6 @@ export class AuthService {
   }
 
   signOut() {
-    this.fireAuth.signOut();
+    return from(this.fireAuth.signOut());
   }
 }

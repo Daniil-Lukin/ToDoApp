@@ -9,10 +9,12 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  constructor(private service: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   public signOutButtonClick(): void {
-    this.service.signOut();
-    this.router.navigate(['sign-in']);
+    this.authService.signOut().subscribe(() => {
+      this.authService.userLoggedIn = false;
+      this.router.navigate(['sign-in']);
+    });
   }
 }

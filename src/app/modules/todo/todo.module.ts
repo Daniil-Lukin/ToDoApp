@@ -13,6 +13,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatFormFieldModule,
     FormsModule,
     MatToolbarModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
   exports: [TaskComponent],
 })

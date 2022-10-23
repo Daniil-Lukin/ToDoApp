@@ -6,7 +6,10 @@ import { AppComponent } from './app.component';
 import { TodoModule } from './modules/todo/todo.module';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import {
+  AngularFireAuth,
+  AngularFireAuthModule,
+} from '@angular/fire/compat/auth';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
@@ -16,7 +19,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthGuard } from './shared/auth.guard';
 import { AuthService } from './shared/services/auth.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,14 +42,41 @@ import { firstValueFrom } from 'rxjs';
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: (authService: AuthService) => () => {
-        authService.setUser();
-        return authService.userLoggedIn;
-      },
-      deps: [AuthService],
+      useFactory:
+        (
+          authService: AuthService,
+          angularFireAuth: AngularFireAuth,
+          router: Router
+        ) =>
+        () => {
+          return firstValueFrom(angularFireAuth.authState).then((user) => {
+            console.log(user);
+            if (user) {
+              authService.userLoggedIn = true;
+              authService.setUser(user);
+              return true;
+            } else {
+              authService.userLoggedIn = false;
+              return router.navigate(['sign-in']);
+            }
+          });
+        },
+      deps: [AuthService, AngularFireAuth, Router],
       multi: true,
     },
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+// switchMap((user) => {
+//   console.log(user);
+//   if (user) {
+//     authService.userLoggedIn = true;
+//     authService.setUser(user);
+//     return of(true);
+//   } else {
+//     authService.userLoggedIn = false;
+//     return router.navigate(['sign-in']).then(() => true);
+//   }
+// }

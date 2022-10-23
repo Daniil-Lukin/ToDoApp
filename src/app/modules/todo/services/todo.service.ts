@@ -1,25 +1,46 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { map, Observable, filter, raceWith } from 'rxjs';
 import { TodoTask } from '../interfaces/TodoTask';
 import { DialogResult } from '../interfaces/dialog-result';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
-  constructor(private _store: AngularFirestore) {}
+  public userDocumentRef = this.angularFirestore
+    .collection('todos')
+    .doc(this.authService.userData.uid);
+
+  public $todos = this.userDocumentRef.collection<TodoTask>('to-do');
+
+  constructor(
+    private angularFirestore: AngularFirestore,
+    private authService: AuthService
+  ) {}
 
   addToDo(result: DialogResult): void {
-    this._store.collection('todo').add(result.task);
+    this.userDocumentRef.collection('to-do').add(result.task);
   }
 
-  changeToDo(task: TodoTask, list: 'todo' | 'inProgress' | 'done'): void {
-    this._store.collection(list).doc(task.id).update(task);
+  changeToDo(task: TodoTask): void {
+    this.userDocumentRef.collection('to-do').doc(task.id).update(task);
   }
 
-  deleteToDo(task: TodoTask, list: 'todo' | 'inProgress' | 'done'): void {
-    this._store.collection(list).doc(task.id).delete();
+  deleteToDo(task: TodoTask): void {
+    this.userDocumentRef.collection('to-do').doc(task.id).delete();
+  }
+
+  getSource() {
+    return this.$todos.snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          const data = a.payload.doc.data() as TodoTask;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
   }
 }

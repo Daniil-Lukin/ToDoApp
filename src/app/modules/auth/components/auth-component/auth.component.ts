@@ -35,8 +35,9 @@ export class AuthComponent implements OnInit {
   }
 
   public signInButtonClick() {
-    this.authService.signIn(this.email.value, this.password.value);
-    this.router.navigate(['to-do']);
+    this.authService
+      .signIn(this.email.value, this.password.value)
+      .subscribe(() => this.router.navigate(['to-do']));
   }
 
   public registrateButtonClick() {
