@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class TodoService {
   public userDocumentRef = this.angularFirestore
     .collection('todos')
-    .doc(this.authService.userData.uid);
+    .doc(this.authService.getUid());
 
   public $todos = this.userDocumentRef.collection<TodoTask>('to-do');
 
@@ -20,16 +20,25 @@ export class TodoService {
     private authService: AuthService
   ) {}
 
+  setDocument() {
+    console.log(this.authService.getUid());
+    this.userDocumentRef = this.angularFirestore
+      .collection('todos')
+      .doc(this.authService.getUid());
+
+    this.$todos = this.userDocumentRef.collection<TodoTask>('to-do');
+  }
+
   addToDo(result: DialogResult): void {
-    this.userDocumentRef.collection('to-do').add(result.task);
+    this.$todos.add(result.task);
   }
 
   changeToDo(task: TodoTask): void {
-    this.userDocumentRef.collection('to-do').doc(task.id).update(task);
+    this.$todos.doc(task.id).update(task);
   }
 
   deleteToDo(task: TodoTask): void {
-    this.userDocumentRef.collection('to-do').doc(task.id).delete();
+    this.$todos.doc(task.id).delete();
   }
 
   getSource() {

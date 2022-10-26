@@ -88,4 +88,8 @@ export class AuthService {
   signOut() {
     return from(this.fireAuth.signOut());
   }
+
+  getUid() {
+    return this.userData.uid;
+  }
 }

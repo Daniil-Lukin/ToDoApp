@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TodoService } from 'src/app/modules/todo/services/todo.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private todoService: TodoService,
     private router: Router,
     private formBuilder: FormBuilder
   ) {}
@@ -37,7 +39,10 @@ export class AuthComponent implements OnInit {
   public signInButtonClick() {
     this.authService
       .signIn(this.email.value, this.password.value)
-      .subscribe(() => this.router.navigate(['to-do']));
+      .subscribe(() => {
+        this.todoService.setDocument();
+        this.router.navigate(['to-do']);
+      });
   }
 
   public registrateButtonClick() {

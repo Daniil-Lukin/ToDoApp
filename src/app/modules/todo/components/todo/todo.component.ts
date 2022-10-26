@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { TodoTask } from '../../interfaces/TodoTask';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,6 +7,7 @@ import { DialogResult } from '../../interfaces/dialog-result';
 import { TodoService } from '../../services/todo.service';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { map } from 'rxjs/operators';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-todo',
@@ -15,21 +16,23 @@ import { map } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
-  public $inProgress = this.todoService
-    .getSource()
-    .pipe(map((data) => data.filter((value) => value.status === 'inProgress')));
+  private dataSource = this.todoService.getSource();
+  public $inProgress = this.dataSource.pipe(
+    map((data) => data.filter((value) => value.status === 'inProgress'))
+  );
 
-  public $done = this.todoService
-    .getSource()
-    .pipe(map((data) => data.filter((value) => value.status === 'done')));
+  public $done = this.dataSource.pipe(
+    map((data) => data.filter((value) => value.status === 'done'))
+  );
 
-  public $todo = this.todoService
-    .getSource()
-    .pipe(map((data) => data.filter((value) => value.status === 'todo')));
+  public $todo = this.dataSource.pipe(
+    map((data) => data.filter((value) => value.status === 'todo'))
+  );
 
   constructor(
     private _dialog: MatDialog,
     private todoService: TodoService,
+    private authService: AuthService,
     private angularFirestore: AngularFirestore
   ) {}
 
@@ -92,5 +95,9 @@ export class TodoComponent {
       event.previousIndex,
       event.currentIndex
     );
+  }
+
+  checkUid() {
+    console.log(this.authService.userData.uid);
   }
 }

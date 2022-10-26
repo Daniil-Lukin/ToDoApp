@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { passwordRepeatValidator } from '../extentions/password-repeat.validator';
 
 @Component({
   selector: 'app-registration',
@@ -27,28 +28,27 @@ export class RegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.registrationForm = this.builder.group(
-      {
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        passwordRepeat: ['', [Validators.required, Validators.minLength(6)]],
-      }
-      // {
-      //   validators: this.passwordRepeatValidator(
-      //     this.password.value,
-      //     this.passwordRepeat.value
-      //   ),
-      // }
-    );
+    this.registrationForm = this.builder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      passwordRepeat: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          passwordRepeatValidator(this.password),
+        ],
+      ],
+    });
   }
 
   public registrateButtonClick(): void {
-    // if (this.password.value === this.passwordRepeat.value) {
-    this.service.signUp(this.email.value, this.password.value);
-    this.router.navigate(['sign-in']);
-    // } else {
-    //   window.alert('Passwords must be the same');
-    // }
+    if (this.registrationForm.valid) {
+      this.service.signUp(this.email.value, this.password.value);
+      this.router.navigate(['sign-in']);
+    } else {
+      window.alert('Passwords must be the same');
+    }
   }
 
   public getErrorMessage(): string {
@@ -69,14 +69,5 @@ export class RegistrationComponent implements OnInit {
 
   get passwordRepeat() {
     return this.registrationForm?.get('passwordRepeat');
-  }
-
-  private passwordRepeatValidator(password: string, passwordRepeat: string) {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (password != passwordRepeat) {
-        return { passwordsDoNotMatch: true };
-      }
-      return null;
-    };
   }
 }
