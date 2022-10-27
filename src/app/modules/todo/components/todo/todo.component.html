@@ -34,7 +34,7 @@
       cdkDropList
       id="inProgress"
       #inProgressList="cdkDropList"
-      [cdkDropListData]="$inProgress"
+      [cdkDropListData]="$inProgress | async"
       [cdkDropListConnectedTo]="[todoList, doneList]"
       (cdkDropListDropped)="drop($event)"
       class="list"

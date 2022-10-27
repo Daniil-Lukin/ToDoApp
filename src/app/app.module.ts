@@ -56,6 +56,7 @@ import { TodoService } from './modules/todo/services/todo.service';
             if (user) {
               authService.userLoggedIn = true;
               authService.setUser(user);
+              todoService.setDocument();
               return true;
             } else {
               authService.userLoggedIn = false;
