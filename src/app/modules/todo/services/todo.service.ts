@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument,
+} from '@angular/fire/compat/firestore';
 import { map, Observable, filter, raceWith } from 'rxjs';
 import { TodoTask } from '../interfaces/TodoTask';
 import { DialogResult } from '../interfaces/dialog-result';
@@ -9,11 +13,9 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   providedIn: 'root',
 })
 export class TodoService {
-  public userDocumentRef = this.angularFirestore
-    .collection('todos')
-    .doc(this.authService.getUid());
+  public userDocumentRef: AngularFirestoreDocument<unknown>;
 
-  public $todos = this.userDocumentRef.collection<TodoTask>('to-do');
+  public $todos: AngularFirestoreCollection<TodoTask>;
 
   constructor(
     private angularFirestore: AngularFirestore,
@@ -21,7 +23,6 @@ export class TodoService {
   ) {}
 
   setDocument() {
-    console.log(this.authService.getUid());
     this.userDocumentRef = this.angularFirestore
       .collection('todos')
       .doc(this.authService.getUid());

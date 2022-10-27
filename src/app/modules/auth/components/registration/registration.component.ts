@@ -36,7 +36,7 @@ export class RegistrationComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(6),
-          passwordRepeatValidator(this.password),
+          passwordRepeatValidator('password'),
         ],
       ],
     });
@@ -44,8 +44,12 @@ export class RegistrationComponent implements OnInit {
 
   public registrateButtonClick(): void {
     if (this.registrationForm.valid) {
-      this.service.signUp(this.email.value, this.password.value);
-      this.router.navigate(['sign-in']);
+      this.service
+        .signUp(this.email.value, this.password.value)
+        .subscribe(({ user }) => {
+          this.service.setUpFirebaseUser(user);
+          this.router.navigate(['sign-in']);
+        });
     } else {
       window.alert('Passwords must be the same');
     }

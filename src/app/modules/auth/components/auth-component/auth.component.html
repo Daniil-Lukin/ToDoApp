@@ -3,7 +3,7 @@
   <div class="register-card">
     <form [formGroup]="authForm">
       <mat-form-field appearance="fill">
-        <mat-label for="email">Enter your email</mat-label>
+        <mat-label for="email"><span>Enter your email</span></mat-label>
         <input
           matInput
           placeholder="pat@example.com"
@@ -35,11 +35,13 @@
       </mat-form-field>
     </form>
     <button mat-raised-button color="primary" (click)="signInButtonClick()">
-      Sign in
+      <span>Sign in</span>
     </button>
     <button mat-button (click)="registrateButtonClick()">
-      Or register if you don't have an account
+      <span>Or register if you don't have an account</span>
     </button>
-    <button mat-stroked-button color="primary">Forgot password</button>
+    <button mat-stroked-button color="primary">
+      <span>Forgot password</span>
+    </button>
   </div>
 </div>

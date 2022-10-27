@@ -1,8 +1,8 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-export function passwordRepeatValidator(password): ValidatorFn {
+export function passwordRepeatValidator(string): ValidatorFn {
   return (control: AbstractControl) => {
-    if (control.value === password) {
+    if (control.value === control.parent?.get(string)) {
       return null;
     }
 

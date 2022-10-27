@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs';
 import { TodoService } from 'src/app/modules/todo/services/todo.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -50,7 +51,9 @@ export class AuthComponent implements OnInit {
   }
 
   public forgotPasswordButtonClick() {
-    this.authService.resetPassword(this.email.value);
+    this.authService
+      .resetPassword(this.email.value)
+      .subscribe(() => console.log('message has been send to your accaunt'));
   }
 
   get email() {
