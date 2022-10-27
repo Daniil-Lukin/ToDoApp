@@ -21,6 +21,7 @@ import { AuthGuard } from './shared/auth.guard';
 import { AuthService } from './shared/services/auth.service';
 import { firstValueFrom, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
+import { TodoService } from './modules/todo/services/todo.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,6 +46,7 @@ import { Router } from '@angular/router';
       useFactory:
         (
           authService: AuthService,
+          todoService: TodoService,
           angularFireAuth: AngularFireAuth,
           router: Router
         ) =>
@@ -61,7 +63,7 @@ import { Router } from '@angular/router';
             }
           });
         },
-      deps: [AuthService, AngularFireAuth, Router],
+      deps: [AuthService, TodoService, AngularFireAuth, Router],
       multi: true,
     },
   ],

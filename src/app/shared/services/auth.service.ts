@@ -68,21 +68,11 @@ export class AuthService {
   }
 
   signUp(email: string, password: string) {
-    return this.fireAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        this.setUpFirebaseUser(user);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+    return from(this.fireAuth.createUserWithEmailAndPassword(email, password));
   }
 
   resetPassword(email: string) {
-    return this.fireAuth
-      .sendPasswordResetEmail(email)
-      .then(() => window.alert('password reset has been sent, check mailbox'))
-      .catch((error) => window.alert(error.message));
+    return of(this.fireAuth.sendPasswordResetEmail(email));
   }
 
   signOut() {
