@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { TodoService } from 'src/app/modules/todo/services/todo.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -14,15 +14,19 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class AuthComponent implements OnInit {
   public authForm;
   public hide: boolean = true;
+  public lang: boolean = true;
 
   constructor(
     private authService: AuthService,
     private todoService: TodoService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
+    this.translateService.setDefaultLang('en');
+    this.translateService.use('en');
     this.authForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -65,6 +69,12 @@ export class AuthComponent implements OnInit {
   }
 
   qwerty() {
-    console.log(this.authService.userLoggedIn);
+    if (this.lang) {
+      this.lang = !this.lang;
+      this.translateService.use('ru');
+    } else {
+      this.lang = !this.lang;
+      this.translateService.use('en');
+    }
   }
 }

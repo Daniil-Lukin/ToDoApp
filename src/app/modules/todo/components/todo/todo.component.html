@@ -1,10 +1,10 @@
 <app-header></app-header>
 <button mat-button (click)="addTask()">
-  <mat-icon>add</mat-icon> Add task
+  <mat-icon>add</mat-icon> {{ "todo.buttons.add" | translate }}
 </button>
 <div calss="dropListscontainer">
   <div class="card-container">
-    <h2>ToDo</h2>
+    <h2>{{ "todo.headers.todo" | translate }}</h2>
 
     <mat-card
       cdkDropList
@@ -16,7 +16,7 @@
       class="list"
     >
       <p class="empty-label" *ngIf="($todo | async)?.length === 0">
-        Empty list
+        {{ "todo.paragraphs.empty" | translate }}
       </p>
       <app-task
         (edit)="editTask($event)"
@@ -27,7 +27,7 @@
     </mat-card>
   </div>
   <div class="card-container">
-    <h2>In progress</h2>
+    <h2>{{ "todo.headers.inProgress" | translate }}</h2>
 
     <mat-card
       cdkDropList
@@ -39,7 +39,7 @@
       class="list"
     >
       <p class="empty-label" *ngIf="($inProgress | async)?.length === 0">
-        Empty list
+        {{ "todo.paragraphs.empty" | translate }}
       </p>
       <app-task
         (edit)="editTask($event)"
@@ -50,7 +50,7 @@
     </mat-card>
   </div>
   <div class="card-container">
-    <h2>Done</h2>
+    <h2>{{ "todo.headers.done" | translate }}</h2>
 
     <mat-card
       cdkDropList
@@ -62,7 +62,7 @@
       class="list"
     >
       <p class="empty-label" *ngIf="($done | async)?.length === 0">
-        Empty list
+        {{ "todo.paragraphs.empty" | translate }}
       </p>
       <app-task
         (edit)="editTask($event)"

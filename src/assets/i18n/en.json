@@ -1,0 +1,61 @@
+{
+  "auth": {
+    "labels": {
+      "email": "Enter your email",
+      "password": "Enter your password"
+    },
+    "buttons": {
+      "signIn": "Sign in",
+      "logIn": "Or register if you don't have an account",
+      "forgotPassword": "Forgot password"
+    },
+    "errors": {
+      "email": {
+        "reqired": "You must enter a value",
+        "notValid": "Not a valid email"
+      }
+    }
+  },
+  "registration": {
+    "labels": {
+      "email": "Enter your email",
+      "password": "Enter your password",
+      "passwordRepeat": "Repit your password"
+    },
+    "buttons": {
+      "registrate": "Registrate account"
+    },
+    "errors": {
+      "email": {
+        "reqired": "You must enter a value",
+        "notValid": "Not a valid email"
+      },
+      "password": {
+        "passwordEquality": "Passwords must be the same"
+      }
+    }
+  },
+  "todo": {
+    "headers": {
+      "todo": "ToDo",
+      "inProgress": "In progress",
+      "done": "Done"
+    },
+    "paragraphs": {
+      "empty": "Empty list"
+    },
+    "buttons": {
+      "add": "Add task"
+    }
+  },
+  "taskDialog": {
+    "labels": {
+      "title": "Title",
+      "description": "Description"
+    },
+    "butons": {
+      "add": "OK",
+      "cancel": "Cancel"
+    }
+  }
+}

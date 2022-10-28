@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AuthComponent, RegistrationComponent],
@@ -20,6 +22,8 @@ import { RegistrationComponent } from './components/registration/registration.co
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    TranslateModule,
+    HttpClientModule,
   ],
   exports: [AuthComponent],
 })

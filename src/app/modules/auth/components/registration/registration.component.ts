@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { passwordRepeatValidator } from '../extentions/password-repeat.validator';
+import { passwordRepeatValidator } from '../../extentions/password-repeat.validator';
 
 @Component({
   selector: 'app-registration',

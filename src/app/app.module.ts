@@ -17,11 +17,18 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthGuard } from './shared/auth.guard';
 import { AuthService } from './shared/services/auth.service';
-import { firstValueFrom, of, switchMap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { TodoService } from './modules/todo/services/todo.service';
+import {
+  MissingTranslationHandler,
+  TranslateLoader,
+  TranslateModule,
+} from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpLoaderFactory } from './shared/extensions/httpLoaderFactory';
+import { MissingTranslationService } from './shared/extensions/translationErrorHandler';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +46,18 @@ import { TodoService } from './modules/todo/services/todo.service';
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireDatabaseModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: MissingTranslationService,
+      },
+      useDefaultLang: false,
+    }),
   ],
   providers: [
     {
@@ -71,15 +90,3 @@ import { TodoService } from './modules/todo/services/todo.service';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
-// switchMap((user) => {
-//   console.log(user);
-//   if (user) {
-//     authService.userLoggedIn = true;
-//     authService.setUser(user);
-//     return of(true);
-//   } else {
-//     authService.userLoggedIn = false;
-//     return router.navigate(['sign-in']).then(() => true);
-//   }
-// }

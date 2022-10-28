@@ -2,7 +2,7 @@
   <div class="register-card">
     <form [formGroup]="registrationForm">
       <mat-form-field appearance="fill">
-        <mat-label>Enter your email</mat-label>
+        <mat-label>{{ "registration.labels.email" | translate }}</mat-label>
         <input
           matInput
           placeholder="pat@example.com"
@@ -15,7 +15,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Enter your password</mat-label>
+        <mat-label>{{ "registration.labels.password" | translate }}</mat-label>
         <input
           matInput
           [type]="hidePassword ? 'password' : 'text'"
@@ -34,7 +34,9 @@
         </button>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Repit your password</mat-label>
+        <mat-label>{{
+          "registration.labels.passwordRepeat" | translate
+        }}</mat-label>
         <input
           matInput
           [type]="hidePasswordRepeat ? 'password' : 'text'"
@@ -54,7 +56,7 @@
       </mat-form-field>
     </form>
     <button mat-button (click)="registrateButtonClick()">
-      <span>Registrate account</span>
+      <span>{{ "registration.buttons.registrate" | translate }}</span>
     </button>
   </div>
 </div>

@@ -1,9 +1,11 @@
-<button (click)="qwerty()">check user</button>
+<button (click)="qwerty()">change localization</button>
 <div class="component-container">
   <div class="register-card">
     <form [formGroup]="authForm">
       <mat-form-field appearance="fill">
-        <mat-label for="email"><span>Enter your email</span></mat-label>
+        <mat-label for="email"
+          ><span>{{ "auth.labels.email" | translate }}</span></mat-label
+        >
         <input
           matInput
           placeholder="pat@example.com"
@@ -16,7 +18,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Enter your password</mat-label>
+        <mat-label>{{ "auth.labels.password" | translate }}</mat-label>
         <input
           matInput
           [type]="hide ? 'password' : 'text'"
@@ -35,13 +37,13 @@
       </mat-form-field>
     </form>
     <button mat-raised-button color="primary" (click)="signInButtonClick()">
-      <span>Sign in</span>
+      <span>{{ "auth.buttons.signIn" | translate }}</span>
     </button>
     <button mat-button (click)="registrateButtonClick()">
-      <span>Or register if you don't have an account</span>
+      <span>{{ "auth.buttons.logIn" | translate }}</span>
     </button>
     <button mat-stroked-button color="primary">
-      <span>Forgot password</span>
+      <span>{{ "auth.buttons.forgotPassword" | translate }}</span>
     </button>
   </div>
 </div>

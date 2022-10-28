@@ -1,0 +1,64 @@
+{
+  "auth": {
+    "labels": {
+      "email": "Введите свою почту",
+      "password": "Введите свой пароль" 
+    },
+    "buttons": {
+      "signIn": "Вход",
+      "logIn": "Или зарегистрируйтесь, если не имеете аккаунта",
+      "forgotPassword": "Восстановление пароля"
+    },
+    "errors": {
+      "email": {
+        "reqired":"Необходимо заполнить поле",
+        "notValid": "Невалидная почта"
+      }
+    }
+  },
+
+  "registration": {
+    "labels": {
+      "email": "Введите свою почту",
+      "password": "Введите свой пароль",
+      "passwordRepeat": "Повторите пароль"
+    },
+    "buttons": {
+      "registrate": "Зарегистрировать аккаунт"
+    },
+    "errors": {
+      "email": {
+        "reqired":"Необходимо заполнить поле",
+        "notValid": "Невалидная почта"
+      },
+      "password": {
+        "passwordEquality": "Пароли должны быть одинаковы"
+      }
+    }
+  },
+
+  "todo": {
+    "headers": {
+      "todo": "В планах",
+      "inProgress": "В процессе",
+      "done": "Сделано"
+    },
+    "paragraphs": {
+      "empty": "Пустой лист"
+    },
+    "buttons": {
+      "add": "Добавить задачу"
+    }
+  },
+
+  "taskDialog": {
+    "labels": {
+      "title": "Заголовок",
+      "description": "Описание"
+    },
+    "butons": {
+      "addButton": "ОК",
+      "cancel": "Отмена"
+    }
+  }
+}
