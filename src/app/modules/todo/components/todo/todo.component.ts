@@ -96,8 +96,4 @@ export class TodoComponent {
       event.currentIndex
     );
   }
-
-  checkUid() {
-    console.log(this.authService.userData.uid);
-  }
 }
