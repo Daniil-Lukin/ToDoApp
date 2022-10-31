@@ -4,15 +4,8 @@ import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
-import { Router } from '@angular/router';
-import {
-  catchError,
-  firstValueFrom,
-  from,
-  Observable,
-  of,
-  switchMap,
-} from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { catchError, from, of, switchMap } from 'rxjs';
 import { User } from './user';
 
 @Injectable({
@@ -23,7 +16,8 @@ export class AuthService {
   public userLoggedIn: boolean = false;
   constructor(
     private fireAuth: AngularFireAuth,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private translateService: TranslateService
   ) {}
 
   setUpFirebaseUser(user: User) {

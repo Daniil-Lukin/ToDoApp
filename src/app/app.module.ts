@@ -29,6 +29,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { HttpLoaderFactory } from './shared/extensions/httpLoaderFactory';
 import { MissingTranslationService } from './shared/extensions/translationErrorHandler';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +37,7 @@ import { MissingTranslationService } from './shared/extensions/translationErrorH
     BrowserModule,
     AppRoutingModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
     BrowserAnimationsModule,
     TodoModule,
     SharedModule,

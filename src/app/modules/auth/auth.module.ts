@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [AuthComponent, RegistrationComponent],
@@ -24,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatButtonModule,
     TranslateModule,
     HttpClientModule,
+    MatProgressSpinnerModule,
   ],
   exports: [AuthComponent],
 })

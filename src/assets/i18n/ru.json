@@ -56,8 +56,8 @@
       "title": "Заголовок",
       "description": "Описание"
     },
-    "butons": {
-      "addButton": "ОК",
+    "buttons": {
+      "add": "ОК",
       "cancel": "Отмена"
     }
   }

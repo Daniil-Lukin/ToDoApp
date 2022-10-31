@@ -1,4 +1,6 @@
-<button (click)="qwerty()">change localization</button>
+<ng-container *ngIf="isLoading | async">
+  <mat-spinner></mat-spinner>
+</ng-container>
 <div class="component-container">
   <div class="register-card">
     <form [formGroup]="authForm">

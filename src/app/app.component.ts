@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StatefulService } from './shared/services/stateful.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +9,8 @@ import { StatefulService } from './shared/services/stateful.service';
 export class AppComponent {
   title = 'todo-app';
 
-  constructor(public state: StatefulService) {}
+  constructor(private translateService: TranslateService) {
+    this.translateService.setDefaultLang('en');
+    this.translateService.use('en');
+  }
 }

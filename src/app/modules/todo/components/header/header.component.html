@@ -1,6 +1,11 @@
 <mat-toolbar color="primary">
   <a>ToDoApp</a>
-  <button mat-stroked-button color="primary" (click)="signOutButtonClick()">
-    <mat-icon>exit_to_app</mat-icon>
-  </button>
+  <div class="button-container">
+    <button mat-stroked-button color="primary" (click)="changeLanguageClick()">
+      <mat-icon>language</mat-icon>
+    </button>
+    <button mat-stroked-button color="primary" (click)="signOutButtonClick()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>
