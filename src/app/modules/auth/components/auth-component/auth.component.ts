@@ -1,10 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { TodoService } from 'src/app/modules/todo/services/todo.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { filter, map, Observable } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -15,9 +20,10 @@ import { filter, map, Observable } from 'rxjs';
 export class AuthComponent implements OnInit {
   public authForm;
   public hide: boolean = true;
-  public isLoading: Observable<Boolean>;
+  public isLoading: boolean = false;
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private todoService: TodoService,
     private router: Router,
@@ -29,29 +35,6 @@ export class AuthComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
-
-    this.isLoading = this.router.events.pipe(
-      filter(
-        (event) =>
-          event instanceof NavigationStart || event instanceof NavigationEnd
-      ),
-      map((event) => event instanceof NavigationStart)
-    );
-
-    const qweqweqe = this.router.events
-      .pipe(
-        filter(
-          (event) =>
-            event instanceof NavigationStart || event instanceof NavigationEnd
-        )
-      )
-      .subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          console.log('Nav start');
-        } else {
-          console.log('nav end');
-        }
-      });
   }
 
   public getErrorMessage(): string {
@@ -63,8 +46,15 @@ export class AuthComponent implements OnInit {
   }
 
   public signInButtonClick() {
+    this.isLoading = true;
     this.authService
       .signIn(this.email.value, this.password.value)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        })
+      )
       .subscribe(() => {
         this.todoService.setDocument();
         this.router.navigate(['to-do']);
